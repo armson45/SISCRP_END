@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-1 shadow-lg" style="width: 40%;">
         <div class="row">
-            <div class="col rounded border p-5">
+            <div class="col rounded border bg-light p-5">
                 <div class="d-flex justify-content-center">
                     <img src="{{ asset('images/arteDentalLogo.jpg') }}" width="48" class="logoart">
                 </div>
@@ -19,7 +19,7 @@
 
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    <strong>Error</strong>
                                 </span>
                             @enderror
                         </div>
@@ -34,7 +34,7 @@
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    <strong>Error</strong>
                                 </span>
                             @enderror
                         </div>
@@ -49,7 +49,7 @@
 
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    <strong>Las contraseñas no coinciden!</strong>
                                 </span>
                             @enderror
                         </div>

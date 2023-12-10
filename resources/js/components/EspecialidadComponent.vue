@@ -1,24 +1,20 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col">
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-6">
-                                <h5 class="float-start">Listado de especialidades de especialidades</h5>
-                            </div>
-                            <div class="col-6">
-                                <button @click="showDialog" class="btn btn-success btn-sm float-end">Nuevo</button>
+                            <div class=" text-right">
+                                <button @click="showDialog" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i> &nbsp; Agregar</button>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-body">
-                        <table class="table bordered">
-                            <thead>
+                        <table class="table table-hover table-bordered">
+                            <thead class="">
                                 <tr>
-                                    <th scope="col">especialidad</th>
+                                    <th scope="col">Especialidad</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
@@ -26,10 +22,10 @@
                                 <tr v-for="item in especialidades" :key="item.id">
                                     <td>{{ item.nombre }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm"
-                                            @click="showDialogEditar(item)">Editar</button>
+                                        <button type="button" class="btn btn-info rounded-pill"
+                                            @click="showDialogEditar(item)"> <i class="bi bi-pencil-fill"></i> &nbsp; <b>Editar</b></button>
                                         &nbsp;
-                                        <button type="button" class="btn btn-danger btn-sm" @click="eliminar(item)">Eliminar</button>
+                                        <button type="button" class="btn btn-danger rounded-pill" @click="eliminar(item)"> <i class="bi bi-trash-fill"> &nbsp;</i><b>Eliminar</b></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -51,7 +47,7 @@
                     <!-- Definiendo el cuerpo del formulario modal -->
                     <div class="row">
                         <div class="form-group col-12">
-                            <label for="nombre">Nombre</label>
+                            <label for="nombre">Especialidad</label>
                             <input type="text" class="form-control" v-model="especialidad.nombre">
                             <span class="text-danger" v-show="especialidadErrors.nombre">Nombre es requerido</span>
                         </div>
@@ -193,8 +189,8 @@ export default {
                     //agregamos al principio del arreglo especialidades, la nueva especialidad
                     me.especialidades.unshift(especialidad);
                     Toast.fire({
-                        icon: 'success',
-                        'title': 'especialidad registrada con exito...!'
+                        'icon': "success",
+                        'title': "Especialidad registrada con éxito!"
                     });
                     break;
                 case "upd":

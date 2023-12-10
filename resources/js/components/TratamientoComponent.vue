@@ -1,41 +1,42 @@
 <template>
-    <div class="container">
+    <div class="container bg-white rounded">
         <div class="row justify-content-center">
             <div class="col-md-12">
-              
-                   
-                    <div class="row">
-                        <div class="col-3">
-                            <button @click="showDialog" class="btn btn-success btn-sm float-end">Agregar
-                                tratamiento</button>
+                <div class="row col-12 p-4">
+                    <div class="col-md-6">
+                        <button @click="showDialog" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i>
+                            &nbsp; Agregar
+                        </button>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                         </div>
+                        <input type="search" v-model="search" @input="filterData(search)" class="form-control"
+                            placeholder="Buscar" aria-label="Buscar" aria-describedby="search-addon">
+                    </div>
+                    <!-- <div class="input-group col-md-4">
+                        <input type="search" v-model="search" @input="filterData(search)" class="form-control rounded"
+                            placeholder="Buscar" arial-label="search" aria-describedby="search-addon" />
+                    </div> -->
+                </div>
 
-                    </div>
-                    <div class="row">
-                        <div class="input-group rounded">
-                            <input type="search" v-model="search" @input="filterData(search)" class="form-control rounded"
-                                placeholder="search" arial-label="search" aria-describedby="search-addon" />
-                        </div>
-                    </div>
-              
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Nombre
-                                </th>
+                                <th>Nombre</th>
                                 <th>Descripcion</th>
-                                <th>Imagen</th>
+                                <th>Imágen</th>
                                 <th>Precio</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Final</th>
-                                <th>especialidad</th>
+                                <th>Especialidad</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in tratamientos" :key="item.id">
-
                                 <td>{{ item.nombreTrabajo }}</td>
                                 <td>{{ item.descripcion }}</td>
                                 <td><img :src="`/img/prevista/${item.imagen}`" :alt="`${item.imagen}`"
@@ -71,20 +72,20 @@
                     <!-- Definiendo el cuerpo del formulario modal -->
                     <div class="row">
                         <div class="form-group col-6">
-                            <label for="nombreTrabajo">nombreTrabajo</label>
+                            <label for="nombreTrabajo">Trabajo</label>
                             <input type="text" class="form-control" v-model="tratamiento.nombreTrabajo">
                             <span class="text-danger" v-show="tratamientoErrors.nombreTrabajo">nombreTrabajo
                                 requerido</span>
                         </div>
                         <div class="form-group col-6">
-                            <label for="descripcion">descripcion</label>
+                            <label for="descripcion">Descripción</label>
                             <input type="text" v-model="tratamiento.descripcion" class="form-control">
                             <span class="text-danger" v-show="tratamientoErrors.descripcion">Seleccione descripcion</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-6">
-                            <label for="descripcion">especialidades</label>
+                            <label for="descripcion">Especialidades</label>
                             <select v-model="tratamiento.especialidad_id" class="form-control">
                                 <option v-for="mark in especialidades" :value="mark.id">
                                     {{ mark.nombre }}
@@ -93,14 +94,14 @@
                             <span class="text-danger" v-show="tratamientoErrors.especialidad">Seleccione especialidad</span>
                         </div>
                         <div class="form-group col-6">
-                            <label for="descripcion">precio</label>
+                            <label for="descripcion">Precio</label>
                             <input type="number" class="form-control" id="losj" v-model="tratamiento.precio" />
                             <span class="text-danger" v-show="tratamientoErrors.precio">Seleccione precio</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-6">
-                            <label for="descripcion">Fecha inicio</label>
+                            <label for="descripcion">Fecha Inicio</label>
                             <input type="date" class="form-control" v-model="tratamiento.fechaInicio">
                             <!-- <span class="text-danger" v-show="tratamientoErrors.fechaInicio">fecha es requerida</span> -->
                         </div>
@@ -112,7 +113,8 @@
                     </div>
                     <div class="form-group col-6">
                         <label for="formfile" class="form-label">Seleccione una imagen para el tratamiento</label>
-                        <input type="file" class="form-control" accept="image/*" @change="getImage">
+                        <input type="file" class="form-control" accept="image/png, image/jpeg, image/gif"
+                            @change="getImage">
                     </div>
                     <div class="col-6">
                         <figure>
@@ -419,8 +421,6 @@ export default {
         }
     },
     mounted() {
-        // this.$swal('Welcome to RentasCars!!!');
-
         this.fetchtratamientos();
         this.fetchDoct();
     }

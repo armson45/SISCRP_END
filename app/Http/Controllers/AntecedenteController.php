@@ -51,17 +51,15 @@ class AntecedenteController extends Controller
             $antecedente->alergiaMedicamentos = $request->alergiaMedicamentos;
             $antecedente->embarazo = $request->embarazo;
             $antecedente->otrosMedicamentosQueToma = $request->otrosMedicamentosQueToma;
-            $antecedente->otrosMedicamentosInfo = $request->otrosMedicamentosInfo;
             $antecedente->otrosDatos = $request->otrosDatos;
             $antecedente->paciente_id = $request->paciente_id;
-            
+
             if ($antecedente->save() >= 1) {
                 return response()->json(['status' => 'ok', 'data' => $antecedente], 201);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-       
     }
 
     /**
@@ -69,7 +67,12 @@ class AntecedenteController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // try {
+        //     $antecedente = AntecedenteMedico::findOrfail($id);
+        //     return $antecedente;
+        // } catch (\Exception $e) {
+        //     return $e->getMessage();
+        // }
     }
 
     /**
@@ -93,6 +96,13 @@ class AntecedenteController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $antecedente = AntecedenteMedico::findOrFail($id);
+            if ($antecedente->delete() >= 1) {
+                return response()->json(['status' => 'ok', 'data' => null], 205);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

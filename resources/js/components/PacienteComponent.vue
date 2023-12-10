@@ -5,8 +5,13 @@
                 <div class="card shadow">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <button @click="showDialog" class="btn btn-success">Agregar Paciente</button>
+                            </div>
+                            <div class="input-group rounded col-md-4 col-sm-8">
+                                <input type="search" v-model="searchCodigo" class="form-control rounded"
+                                    placeholder="Buscar Paciente Por Codigo" aria-label="Search"
+                                    aria-describedby="search-addon">
                             </div>
 
                         </div>
@@ -24,7 +29,7 @@
                             </thead>
                             <tbody>
 
-                                <tr v-for="item in pacientes" :key="item">
+                                <tr v-for="item in filteredPacientes" :key="item.id">
                                     <td>{{ item.codigo }}</td>
                                     <td>{{ item.nombreCom }}</td>
                                     <td>{{ item.numTel }}</td>
@@ -56,19 +61,22 @@
                 <div class="modal-body">
                     <!-- Definiendo el cuerpo del formulario modal -->
                     <div class="row">
-                        <div class="form-group col-3">
+                        <div class="form-group col-10">
                             <label for="nombre">Nombre Completo</label>
-                            <input type="text" id="toad" class="form-control" v-model="paciente.nombreCom">
+                            <input type="text" class="form-control" v-model="paciente.nombreCom">
                             <span class="text-danger" v-show="pacienteErrors.nombreCom">Nombre es requerido</span>
                         </div>
-                        <div class="form-group col-3">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-5">
                             <label for="nombre">Numero de telefono</label>
-                            <input type="text" id="losj" class="form-control" maxlength="8" size="13" v-model="paciente.numTel">
+                            <input type="text" class="form-control" v-model="paciente.numTel">
                             <span class="text-danger" v-show="pacienteErrors.numTel">numero es requerido</span>
                         </div>
-                        <div class="form-group col-3">
+                        <div class="form-group col-5">
                             <label for="nombre">Fecha de nacimiento</label>
-                            <input id="date1" type="date" min="obtenerFechas" class="form-control" v-model="paciente.fechaNacimiento">
+                            <input id="date1" type="date" min="obtenerFechas" class="form-control"
+                                v-model="paciente.fechaNacimiento">
                             <span class="text-danger" v-show="pacienteErrors.fechaNacimiento">numero es requerido</span>
                         </div>
                     </div>
@@ -89,7 +97,7 @@ export default {
     props: ['user'],
     data() {
         return {
-            newfecha:"",
+            newfecha: "",
             pacientes: [],
             paciente: {
                 id: null,
@@ -110,7 +118,9 @@ export default {
                 fechaNacimiento: false,
                 fechaRegistro: false,
                 user: null
-            }
+            },
+            searchNombre: '', // Agrega esta línea
+            searchCodigo: '', // Agrega esta línea
         }
     },
     computed: {
@@ -126,8 +136,20 @@ export default {
             var d = 31;
             var newfecha = `${y}-${m}-${d}`;
             console.log(newfecha);
-            picker.setAttribute('max',newfecha);
+            picker.setAttribute('max', newfecha);
             return newfecha;
+        },
+
+        filteredPacientes() {
+            const searchTermNombre = this.searchNombre.toLowerCase();
+            const searchTermCodigo = this.searchCodigo.toLowerCase();
+
+            return this.pacientes.filter(paciente => {
+                const matchNombre = paciente.nombreCom.toLowerCase().includes(searchTermNombre);
+                const matchCodigo = searchTermCodigo === '' || paciente.codigo.toLowerCase().includes(searchTermCodigo);
+
+                return matchNombre && matchCodigo;
+            });
         },
 
 
@@ -160,7 +182,7 @@ export default {
         btnTitle() {
             return this.paciente.id == null ? "Guardar" : "Actualizar";
         }
-        
+
     },
     methods: {
         async fetchpaciente() {
@@ -312,7 +334,6 @@ export default {
         }
     },
     mounted() {
-        // this.$swal('Welcome to RentasCars!!!');
         this.fetchpaciente();
         console.log(this.user);
         console.log(this.obtenerFechas);

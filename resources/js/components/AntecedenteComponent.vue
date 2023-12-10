@@ -5,24 +5,30 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-6">
-                            <button type="button" class="btn btn-primary col-md-6" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                 data-bs-target="#antecendentesModal">
-                                Agregar Antecedentes
+                                <i class="bi bi-file-earmark-plus-fill"></i> &nbsp; Agregar
                             </button>
                         </div>
-                        <div class="col-6">
-                            <button type="button" class="btn btn-primary col-md-6" data-bs-toggle="modal"
-                                data-bs-target="#antecendentesModal">
-                                Buscar
-                            </button>
+                        <div class="input-group col-md-6">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                            </div>
+                            <input type="search" v-model="search" @input="filterData(search)" class="form-control"
+                                placeholder="Buscar" aria-label="Buscar" aria-describedby="search-addon">
                         </div>
+                        <!-- <div class="input-group flex-nowrap col-5">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="search" v-model="searchNombre" class="form-control"
+                                placeholder="Buscar" aria-label="search" aria-describedby="search-addon">
+                        </div> -->
                     </div>
                 </div>
 
                 <div class="container shadow mt-5 p-3">
                     <div class="row">
-                        <!-- desde aqui para repetir -->
-                        <div class="col-sm-6 mb-3 mb-sm-0">
+                        <!-- desde aqui repetir -->
+                        <div class="col-sm-6 mb-3 mb-sm-0" v-for="antecedente in filteredAntecedentes">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
@@ -33,9 +39,15 @@
                                             <path
                                                 d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
                                         </svg>
-                                        <p class="col">
-                                            Antecendentes Médicos de {{ antecedentes.pacienteId }}
+                                        <p class="col pt-3">
+                                            <b>Paciente:</b> {{ antecedente.paciente.nombreCom }} <br>
                                         </p>
+                                        <div class="col pt-3">
+                                            <button type="button" class="btn btn-info rounded-pill"
+                                                @click="eliminar(antecedente)">
+                                                Eliminar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -56,21 +68,38 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="antecendentesModalLabel">Antecedentes Médicos</h1>
+                    <!-- <h1 class="modal-title fs-5" id="antecendentesModalLabel">{{ antecedentes.paciente_id }}</h1> -->
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <form role="form" method="post" class="shadow p-3 w-100 mx-auto rounded justify-content-center">
                             <div class="row">
+
+                                <div class="col-md-6">
+                                    <label for="hipertension" class="">Hipertensión Arterial</label>
+                                    <select class="form-control w-50" v-model="antecedentes.paciente_id" aria-label="">
+                                        <option id="pacientenull" value="null" selected disabled>Escoger Paciente</option>
+                                        <option v-for="paciente in pacientes" :value="paciente.id">
+                                            {{ paciente.nombreCom }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+
+                                </div>
+                            </div>
+                            <div class="row">
+
                                 <div class="col-md-6">
                                     <label for="hipertension" class="">Hipertensión Arterial</label>
                                     <div class="form-check">
                                         <label class="">
                                             <input type="radio" name="hipertension" value="si"
-                                                v-model="antecedentes.hipertencion"> Si
+                                                v-model="antecedentes.hipertencionArterial"> Si
                                         </label>
                                         <label class="mx-4">
                                             <input type="radio" name="hipertension" value="no"
-                                                v-model="antecedentes.hipertencion" checked>
+                                                v-model="antecedentes.hipertencionArterial" checked>
                                             No
                                         </label>
                                     </div>
@@ -92,15 +121,16 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="hipertension" class="">Diabetes Mellitus</label>
+                                    <label for="diabetesMellitu" class="">Diabetes Mellitus</label>
                                     <div class="form-check">
                                         <label class="">
-                                            <input type="radio" name="mellitus" value="si" v-model="antecedentes.mellitus">
+                                            <input type="radio" name="diabetesMellitu" value="si"
+                                                v-model="antecedentes.diabetesMellitu">
                                             Si
                                         </label>
                                         <label class="mx-4">
-                                            <input type="radio" name="mellitus" value="no" v-model="antecedentes.mellitus"
-                                                checked> No
+                                            <input type="radio" name="diabetesMellitu" value="no"
+                                                v-model="antecedentes.diabetesMellitu" checked> No
                                         </label>
                                     </div>
                                 </div>
@@ -120,15 +150,15 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="respiratorio" class="">Problema Respiratorio</label>
+                                    <label for="problemaRespiratorio" class="">Problema Respiratorio</label>
                                     <div class="form-check">
                                         <label class="">
-                                            <input type="radio" name="respiratorio" value="si"
-                                                v-model="antecedentes.respiratorio"> Si
+                                            <input type="radio" name="problemaRespiratorio" value="si"
+                                                v-model="antecedentes.problemaRespiratorio"> Si
                                         </label>
                                         <label class="mx-4">
-                                            <input type="radio" name="respiratorio" value="no"
-                                                v-model="antecedentes.respiratorio" checked>
+                                            <input type="radio" name="problemaRespiratorio" value="no"
+                                                v-model="antecedentes.problemaRespiratorio" checked>
                                             No
                                         </label>
                                     </div>
@@ -150,29 +180,29 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="endocronico" class="">Problema Endocrónico</label>
+                                    <label for="problemaEndocronico" class="">Problema Endocrónico</label>
                                     <div class="form-check">
                                         <label class="">
-                                            <input type="radio" name="endocronico" value="si"
-                                                v-model="antecedentes.endocrinico"> Si
+                                            <input type="radio" name="problemaEndocronico" value="si"
+                                                v-model="antecedentes.problemaEndocronico"> Si
                                         </label>
                                         <label class="mx-4">
-                                            <input type="radio" name="endocronico" value="no"
-                                                v-model="antecedentes.endocrinico" checked>
+                                            <input type="radio" name="problemaEndocronico" value="no"
+                                                v-model="antecedentes.problemaEndocronico" checked>
                                             No
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="hemorragico" class="">Problema Hemorragico</label>
+                                    <label for="problemaHemorragico" class="">Problema Hemorragico</label>
                                     <div class="form-check">
                                         <label class="">
-                                            <input type="radio" name="hemorragico" value="si"
-                                                v-model="antecedentes.hemorragico"> Si
+                                            <input type="radio" name="problemaHemorragico" value="si"
+                                                v-model="antecedentes.problemaHemorragico"> Si
                                         </label>
                                         <label class="mx-4">
-                                            <input type="radio" name="hemorragico" value="no"
-                                                v-model="antecedentes.hemorragico" checked> No
+                                            <input type="radio" name="problemaHemorragico" value="no"
+                                                v-model="antecedentes.problemaHemorragico" checked> No
                                         </label>
                                     </div>
                                 </div>
@@ -194,18 +224,19 @@
 
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="alergia" class="">Alergia a Medicamentos</label>
+                                    <label for="alergiaMedicamentos" class="">Alergia a Medicamentos</label>
                                     <textarea type="text" class="form-control" id="alergia" name="alergia"
-                                        placeholder="Escriba aquí" rows="3" maxlength="45" v-model="antecedentes.alergia" />
+                                        placeholder="Escriba aquí" rows="3" maxlength="45"
+                                        v-model="antecedentes.alergiaMedicamentos" />
                                 </div>
                             </div>
 
                             <div class="row my-3">
                                 <div class="col-md-6">
-                                    <label for="otrosMedicamentos" class="">Otros medicamentos</label>
-                                    <textarea type="text" class="form-control" id="otrosMedicamentos"
-                                        name="otrosMedicamentos" placeholder="Escriba aquí" rows="3" maxlength="45"
-                                        v-model="antecedentes.otrosMedicamentos" />
+                                    <label for="otrosMedicamentosQueToma" class="">Otros medicamentos</label>
+                                    <textarea type="text" class="form-control" id="otrosMedicamentosQueToma"
+                                        name="otrosMedicamentosQueToma" placeholder="Escriba aquí" rows="3" maxlength="45"
+                                        v-model="antecedentes.otrosMedicamentosQueToma" />
                                 </div>
                                 <div class="col-md-6">
                                     <label for="otrosDatos">Otros Datos</label>
@@ -216,7 +247,7 @@
                             </div>
 
                             <div class="col-6 text-end">
-                                <button type="submit" class="btn btn-primary col-md-6">Enviar</button>
+                                <button type="button" class="btn btn-primary col-md-6" @click="saveOrUpdate">Enviar</button>
                             </div>
                         </form>
                     </div>
@@ -234,23 +265,25 @@ export default {
     props: ['user'],
     data() {
         return {
+            filteredAntecedentes: [], // Cambia de propiedad computada a propiedad regular
             listAntecedentes: [],
             antecedentes: {
                 id: null,
-                hipertencion: "no",
+                hipertencionArterial: "no",
                 cardiopatia: "no",
-                mellitus: "no",
-                renal: "no",
-                hepatico: "no",
-                respiratorio: "no",
-                endocrinico: "no",
-                hemorragico: "no",
+                diabetesMellitu: "no",
+                problemaRenal: "no",
+                problemaRespiratorio: "no",
+                problemaHepatico: "no",
+                problemaEndocronico: "no",
+                problemaHemorragico: "no",
+                alergiaMedicamentos: "",
                 embarazo: "no",
-                alergia: "",
-                otrosMedicamentos: "",
+                otrosMedicamentosQueToma: "",
                 otrosDatos: "",
-                pacienteId: "David Elas",
+                paciente_id: null,
             },
+            pacientes: [],
             editedAntecendentes: -1,
             antecedentesErrors: {
                 hipertencion: false,
@@ -266,19 +299,41 @@ export default {
                 otrosMedicamentos: false,
                 otrosDatos: false,
                 pacienteId: null,
-            }
+            },
+            searchNombre: '',
         }
     },
     computed: {
 
+        filteredAntecedentes() {
+            // Filtrar los antecedentes basados en el nombre del paciente
+            return this.listAntecedentes.filter(antecedente =>
+                antecedente.paciente.nombreCom.toLowerCase().includes(this.searchNombre.toLowerCase())
+            );
+        },
+
     },
     methods: {
+        async fetchpaciente() {
+            let me = this;
+            await this.axios.get('/pacientes')
+                .then(response => {
+                    me.pacientes = response.data;
+                })
+        },
+        async fetchAntecedentes() {
+            let me = this;
+            await this.axios.get('/antece')
+                .then(response => {
+                    me.listAntecedentes = response.data;
+                })
+        },
         async saveOrUpdate() {
             let me = this;
             // me.doctor.user = this.user;
-            me.antecedentes.hipertencion == '' ? me.antecedentesErrors.hipertencion == true : me.antecedentesErrors.hipertencion = false;
+            me.antecedentes.hipertencionArterial == '' ? me.antecedentesErrors.hipertencion == true : me.antecedentesErrors.hipertencion = false;
             me.antecedentes.alergia == '' ? me.antecedentesErrors.alergia == true : me.antecedentesErrors.alergia = false;
-            if (me.antecedentes.hipertencion) {
+            if (me.antecedentes.hipertencionArterial) {
                 let accion = me.antecedentes.id == null ? "add" : "upd";
                 if (accion == "add") {
                     await this.axios.post('/antece', me.antecedentes)
@@ -305,6 +360,31 @@ export default {
                 }
             }
         },
+        async eliminar(antecedenteDelete) {
+            //alert(doctor.id);
+            let me = this;
+            this.$swal.fire({
+                title: 'Seguro de eliminar este registro?',
+                text: "No podrás revertir esta accion",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                    me.editedAntecendentes = me.listAntecedentes.indexOf(antecedenteDelete);
+                    this.axios.delete(`/antece/${antecedenteDelete.id}`)
+                        .then(response => {
+                            me.verificarAccion(null, response.status, "del");
+                            // console.log(response);
+                        }).catch(errors => {
+                            console.log(errors);
+                        })
+                }
+            })
+        },
         verificarAccion(antecedente, statusCode, accion) {
             let me = this;
             const Toast = this.$swal.mixin({
@@ -316,10 +396,10 @@ export default {
             });
             switch (accion) {
                 case "add":
-                    me.antecedentes.unshift(antecedente);
+                    me.listAntecedentes.unshift(antecedente);
                     Toast.fire({
-                        'icon': 'success',
-                        'title': 'Se ha guardado con éxito'
+                        icon: 'success',
+                        title: 'Se ha guardado con éxito'
                     });
                     break;
                 case "upd":
@@ -331,7 +411,8 @@ export default {
                     break;
                 case "del":
                     if (statusCode == 205) {
-                        me.antecedentes.splice(this.editedAntecendentes, 1);
+
+                        me.listAntecedentes.splice(this.editedAntecendentes, 1);
                         Toast.fire({
                             'icon': 'success',
                             'title': 'Se ha eliminado con éxito!'
@@ -346,10 +427,34 @@ export default {
                 default:
                     break;
             }
-        }
+        },
+        hideDialog() {
+            let me = this;
+            setTimeout(() => {
+                me.antecedentes = {
+                    hipertencionArterial: null,
+                    cardiopatia: null,
+                    diabetesMellitu: null,
+                    problemaRenal: null,
+                    problemaRespiratorio: null,
+                    problemaHepatico: null,
+                    problemaEndocronico: null,
+                    problemaHemorragico: null,
+                    alergiaMedicamentos: null,
+                    embarazo: null,
+                    otrosMedicamentosQueToma: null,
+                    otrosDatos: null,
+                    paciente_id: null,
+                }
+            }, 300);
+            $('#antecendentesModal').modal('hide');
+        },
     },
-    mounted() {
-
+    async mounted() {
+        await this.fetchpaciente();
+        await this.fetchAntecedentes();
+        this.filteredAntecedentes = this.listAntecedentes; // Muestra todos los antecedentes al inicio
     }
+
 }
 </script>
